@@ -15,10 +15,10 @@ namespace SeleniumCSharp
         {
             Console.WriteLine("Enter sum of  2 + 2 = ");
 
-            string str = Console.ReadLine();
-            int a = Convert.ToInt32(str);
+            //string str = Console.ReadLine();
+           // int a = Convert.ToInt32(Console.ReadLine());
 
-            Assert.AreEqual(4, Is.EqualTo(a));
+            Assert.That(2 + 2, Is.EqualTo(Convert.ToInt32(Console.ReadLine())));
         }
       
 
@@ -42,7 +42,7 @@ namespace SeleniumCSharp
             int rd = rnd.Next(0, 100);
                        
 
-            Assert.AreEqual(((rd <= 50) && (rd >= 10)) && (CheckIfPrime(rd) == true), "not prime " + rd);
+            Assert.That((rd <= 50) && (rd >= 10) && (CheckIfPrime(rd) == true), "not prime " + rd);
             
         }
 
