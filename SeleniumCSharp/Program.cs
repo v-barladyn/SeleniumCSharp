@@ -13,10 +13,7 @@ namespace SeleniumCSharp
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Enter sum of  2 + 2 = ");
-
-            //string str = Console.ReadLine();
-           // int a = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine("Enter sum of  2 + 2 = ");          
 
             Assert.That(2 + 2, Is.EqualTo(Convert.ToInt32(Console.ReadLine())));
         }
