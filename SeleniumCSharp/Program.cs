@@ -13,8 +13,14 @@ namespace SeleniumCSharp
     {
         static void Main(string[] args)
         {
-           
+            Console.WriteLine("Enter sum of  2 + 2 = ");
+
+            string str = Console.ReadLine();
+            int a = Convert.ToInt32(str);
+
+            Assert.AreEqual(4, Is.EqualTo(a));
         }
+      
 
         [Test]
         public void CompareTitle()
@@ -27,6 +33,35 @@ namespace SeleniumCSharp
 
             Assert.AreEqual(title, driver.Title.Trim());
             driver.Close();
+        }
+
+        [Test]
+        public void VerifyNumber()
+        {
+            Random rnd = new Random();
+            int rd = rnd.Next(0, 100);
+                       
+
+            Assert.AreEqual(((rd <= 50) && (rd >= 10)) && (CheckIfPrime(rd) == true), "not prime " + rd);
+            
+        }
+
+        public bool CheckIfPrime(int number)
+        {
+            if (number == 1 || number == 2)
+            {
+                return false;
+            }
+
+
+            if (number % 2 == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
         }
     }
 }
