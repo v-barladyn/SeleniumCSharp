@@ -266,7 +266,7 @@ namespace SeleniumCSharp
         [TearDown]
         public void AfterTests()
         {
-            driver.Close();
+            driver.Quit();
         }
 
 
