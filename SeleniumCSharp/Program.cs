@@ -26,136 +26,31 @@ namespace SeleniumCSharp
         public void Before()
         {
             
-            driver.Navigate().GoToUrl("https://www.i.ua/");
+            driver.Navigate().GoToUrl("http://the-internet.herokuapp.com/tinymce");
             driver.Manage().Window.Maximize();
 
         }
         [SetUp]
         public void BeforeEachTests()
         {
-          
+
         }
 
-        // Smoke Tests
 
+        //3.1
         [Test]
-        public void CheckIfLoginFormIsPresented()
+        public void InsertGettextFromForm()
         {
-            IWebElement loginForm = driver.FindElement(By.Name("lform"));
+            string text = "Vasillsa@email.ua";           
+            IWebElement InsertIntoEditor = driver.FindElement(By.XPath("//body[@id='tinymce']/p"));
+            InsertIntoEditor.SendKeys(text);
 
-            Assert.IsTrue(loginForm.Displayed);
-
-        }
-
-        [Test]
-        public void VerifyTitleOfLoginForm()
-        {
-
-            IWebElement TitleOfLoginForm = driver.FindElement(By.LinkText("Пошта"));
-
-            Assert.IsTrue(TitleOfLoginForm.Displayed);
-
-        }
-
-        [Test]
-        public void LoginText()
-        {
-
-            IWebElement loginText = driver.FindElement(By.XPath("//p[contains(text(),'Логін')]"));
-
-            Assert.IsTrue(loginText.Displayed);
-
-        }
-        [Test]
-        public void LoginInput()
-        {
-
-            IWebElement loginInput = driver.FindElement(By.Name("login"));
-
-            Assert.IsTrue(loginInput.Displayed);
-
-        }
-
-        [Test]
-        public void PasswordText()
-        {
-
-            IWebElement passwordText = driver.FindElement(By.XPath("//p[contains(text(),'Пароль')]"));
-
-            Assert.IsTrue(passwordText.Displayed);
-
-        }
-        [Test]
-        public void PasswordInput()
-        {
-
-            IWebElement passwordInput = driver.FindElement(By.Name("pass"));
-
-            Assert.IsTrue(passwordInput.Displayed);
-
-        }
-
-        [Test]
-        public void RememberLink()
-        {
-
-            IWebElement rememberLink = driver.FindElement(By.LinkText("нагадати"));
-
-            Assert.IsTrue(rememberLink.Displayed);
-
-        }
-
-        [Test]
-        public void DropdownWithDomens()
-        {
-
-            IWebElement dropdownWithDomens = driver.FindElement(By.Name("domn"));
-
-            Assert.IsTrue(dropdownWithDomens.Displayed);
-
-        }
-
-        [Test]
-        public void RememberMeText()
-        {
-
-            IWebElement rememberMeText = driver.FindElement(By.CssSelector("#c00"));
-
-            Assert.IsTrue(rememberMeText.Displayed);
-
-        }
-
-        [Test]
-        public void RememberMeCheckBox()
-        {
-
-            IWebElement rememberMeCheckBox = driver.FindElement(By.Name("auth_type"));
-
-            Assert.IsTrue(rememberMeCheckBox.Displayed);
-
-        }
-        [Test]
-        public void RegistrationLink()
-        {
-
-            IWebElement registrationLink = driver.FindElement(By.LinkText("Реєстрація"));
-
-            Assert.IsTrue(registrationLink.Displayed);
-
-        }
-
-        [Test]
-        public void LoginButton()
-        {
-
-            IWebElement loginButton = driver.FindElement(By.CssSelector("input[value='Увійти']"));
-
-            Assert.IsTrue(loginButton.Displayed);
-
+            Assert.AreEqual(text, InsertIntoEditor.GetAttribute("value"));
         }
 
 
-        
+
+
         //2.2 
 
         [Test]
