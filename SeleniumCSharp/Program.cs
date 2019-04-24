@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic; 
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Interactions;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace SeleniumCSharp
 {
@@ -26,7 +28,6 @@ namespace SeleniumCSharp
         public void Before()
         {
             
-            driver.Navigate().GoToUrl("http://the-internet.herokuapp.com/tinymce");
             driver.Manage().Window.Maximize();
 
         }
@@ -39,23 +40,29 @@ namespace SeleniumCSharp
 
         //3.1
         [Test]
-        public void InsertGettextFromForm()
+        public void InsertGetTextFromForm()
         {
-            string text = "Vasillsa@email.ua";           
-            IWebElement InsertIntoEditor = driver.FindElement(By.XPath("//body[@id='tinymce']/p"));
-            InsertIntoEditor.SendKeys(text);
+            driver.Navigate().GoToUrl("http://the-internet.herokuapp.com/tinymce");
+            string text = "Vasillsa@email.ua";          
+            driver.SwitchTo().Frame(driver.FindElement(By.Id("mce_0_ifr")));                
 
-            Assert.AreEqual(text, InsertIntoEditor.GetAttribute("value"));
+            IWebElement element = driver.FindElement(By.XPath("//body[@id='tinymce']"));
+            element.Clear();
+            element.SendKeys(text);
+            Assert.AreEqual(text, element.Text);
+
+            driver.SwitchTo().ParentFrame();
+            IWebElement AllignCenter = driver.FindElement(By.XPath("//div[@id='mceu_6']/button/i"));
+
+            AllignCenter.Click();            
         }
 
-
-
-
-        //2.2 
-
+        //3.2
         [Test]
-        public void LogIntoMailBox()
+        public void DeleteEmail()
         {
+            driver.Navigate().GoToUrl("https://www.i.ua/");
+
             IWebElement passwordInput = driver.FindElement(By.Name("pass"));
             IWebElement loginInput = driver.FindElement(By.Name("login"));
             IWebElement loginButton = driver.FindElement(By.CssSelector("input[value='Увійти']"));
@@ -64,99 +71,70 @@ namespace SeleniumCSharp
             string myPassword = "qwerty123!";
             string title = "Вхідні - I.UA ";
 
-            loginInput.SendKeys(myLogin);       
+            loginInput.SendKeys(myLogin);
             passwordInput.SendKeys(myPassword);
             loginButton.Click();
 
             Assert.AreEqual(title, driver.Title);
-        }
 
-        //2.3
+            IWebElement element = driver.FindElement(By.Name("list[]"));
+            element.Click();
+           
+
+            int numberOfElements = driver.FindElements(By.XPath("//form[@name='aform']/div")).Count;
+
+            IWebElement deleteButton = driver.FindElement(By.XPath("(//span[@buttonname='del'])[first()]"));
+            deleteButton.Click();
+
+            IAlert confirmationAlert = driver.SwitchTo().Alert();
+            confirmationAlert.Accept();
+
+           
+            int countOfEmailsAfterDeliting = driver.FindElements(By.XPath("//form[@name='aform']/div")).Count;
+
+            Assert.AreEqual(numberOfElements - 1 , countOfEmailsAfterDeliting);
+
+        }      
+
+       
+        //3.3
 
         [Test]
-        public void LogIntoMailBoxVerification()
+        public void HandlingMultipleWindows()
         {
+            string url = "https://www.i.ua/";
+
+            driver.Navigate().GoToUrl(url);
+
             IWebElement passwordInput = driver.FindElement(By.Name("pass"));
             IWebElement loginInput = driver.FindElement(By.Name("login"));
             IWebElement loginButton = driver.FindElement(By.CssSelector("input[value='Увійти']"));
-            IWebElement dropdownWithDomens = driver.FindElement(By.Name("domn"));
-            IWebElement rememberMeCheckBox = driver.FindElement(By.Name("auth_type"));
-
-            SelectElement oSelect = new SelectElement(dropdownWithDomens);
 
             string myLogin = "Vasillsa@email.ua";
             string myPassword = "qwerty123!";
             string title = "Вхідні - I.UA ";
-            string emailDomen = "email.ua";       
-                       
-            loginInput.SendKeys(myLogin);
-            passwordInput.SendKeys(myPassword);
-            oSelect.SelectByText(emailDomen);
-            rememberMeCheckBox.Click();            
-
-            Assert.AreEqual(emailDomen, oSelect.SelectedOption.Text);
-            Assert.IsTrue(rememberMeCheckBox.Selected);
-            Assert.AreEqual(myLogin, loginInput.GetAttribute("value"));
-            Assert.AreEqual(myPassword, passwordInput.GetAttribute("value"));           
-        }
-
-        //2.4
-        [Test]
-        public void VerifyEmail()
-        {
-            IWebElement passwordInput = driver.FindElement(By.Name("pass"));
-            IWebElement loginInput = driver.FindElement(By.Name("login"));
-            IWebElement loginButton = driver.FindElement(By.CssSelector("input[value='Увійти']"));
-    
+            string titleOfPageAfterExit = "Пошта - електронна пошта з доменами @i.ua, @ua.fm і @email.ua, створіть собі e-mail адресу на нашому порталі";
             
-
-            string myLogin = "Vasillsa@email.ua";
-            string myPassword = "qwerty123!";
-            string welcomEmail = "Ласкаво просимо на I.UA!";            
-         
-
             loginInput.SendKeys(myLogin);
             passwordInput.SendKeys(myPassword);
             loginButton.Click();
 
-            IWebElement welcomThemeEmail = driver.FindElement(By.XPath("//a/span/span[contains(text(),'Ласкаво просимо на I.UA!')]"));
-            
-            Assert.AreEqual(welcomEmail, welcomThemeEmail.Text);
-
-            Actions actions = new Actions(driver);
-            actions.MoveToElement(welcomThemeEmail);
-            actions.Perform();
-        
-
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromMilliseconds(2000));
-            wait.Until(ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath("//li[contains(text(),' Добрий день, vasyl vasyl.')]")));
-
-            IWebElement emailPopup = driver.FindElement(By.XPath("//li[contains(text(),' Добрий день, vasyl vasyl.')]"));
-            Assert.IsTrue(emailPopup.Displayed);
-         
-         
-        }
-
-        //2.5
-        [Test]
-        public void LogIntoMailBoxJSExecutor()
-        {
-            IWebElement passwordInput = driver.FindElement(By.Name("pass"));
-            IWebElement loginInput = driver.FindElement(By.Name("login"));
-            IWebElement loginButton = driver.FindElement(By.CssSelector("input[value='Увійти']"));
-            IJavaScriptExecutor js = (IJavaScriptExecutor) driver;
-
-            string myLogin = "Vasillsa@email.ua";
-            string myPassword = "qwerty123!";
-            string title = "Вхідні - I.UA ";            
-
-            js.ExecuteScript("arguments[0].setAttribute('value', arguments[1])", loginInput, myLogin);
-            js.ExecuteScript("arguments[0].setAttribute('value', arguments[1])", passwordInput, myPassword);
-            js.ExecuteScript("arguments[0].click();", loginButton);         
-
             Assert.AreEqual(title, driver.Title);
-        }
 
+            ((IJavaScriptExecutor)driver).ExecuteScript("window.open();");
+            driver.SwitchTo().Window(driver.WindowHandles.Last());
+            driver.Navigate().GoToUrl(url);
+            
+            IWebElement exitButton = driver.FindElement(By.XPath("//a[contains(text(),'Вихід')]"));
+            exitButton.Click();
+
+            driver.SwitchTo().Window(driver.WindowHandles.First());
+
+            driver.Navigate().Refresh();           
+
+            Assert.AreEqual(titleOfPageAfterExit, driver.Title.Trim());
+
+        }      
 
         [TearDown]
         public void AfterTests()
