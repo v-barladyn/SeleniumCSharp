@@ -15,135 +15,106 @@ namespace SeleniumCSharp
         static void Main(string[] args)
         {
 
-        }
-      
-
-      
+        }    
+              
     }
     class Tests
     {
-        IWebDriver driver = new ChromeDriver();
+       
 
         [OneTimeSetUp]        
         public void Before()
         {
+            InstanceOfDriver.driver = new ChromeDriver();
+            InstanceOfDriver.driver.Manage().Window.Maximize();           
             
-            driver.Manage().Window.Maximize();
 
         }
         [SetUp]
         public void BeforeEachTests()
         {
+           
+        }
+
+        [Test]
+        public void CreateNewEmail()
+        {
+            CustomMethods.OpenSite("https://www.i.ua/");
+            LoginPage loginPage = new LoginPage();
+            EmailManagePage emailManagePage = loginPage.Login(loginPage.myLogin, loginPage.myPassword);
+            emailManagePage.CheckTitleOnThePage(emailManagePage.title);
+            emailManagePage.CreateNewLetter(emailManagePage.sendTo, emailManagePage.subject, emailManagePage.emailText);
+        }
+
+        [Test]
+        public void VerifySubjectAfterEdit()
+        {
+
+        }
+
+        public void VerifyBodyAfterEdit()
+        {
 
         }
 
 
-        //3.1
         [Test]
-        public void InsertGetTextFromForm()
+        public void EditEmailAllFields()
         {
-            driver.Navigate().GoToUrl("http://the-internet.herokuapp.com/tinymce");
-            string text = "Vasillsa@email.ua";          
-            driver.SwitchTo().Frame(driver.FindElement(By.Id("mce_0_ifr")));                
-
-            IWebElement element = driver.FindElement(By.XPath("//body[@id='tinymce']"));
-            element.Clear();
-            element.SendKeys(text);
-            Assert.AreEqual(text, element.Text);
-
-            driver.SwitchTo().ParentFrame();
-            IWebElement AllignCenter = driver.FindElement(By.XPath("//div[@id='mceu_6']/button/i"));
-
-            AllignCenter.Click();            
+            CustomMethods.OpenSite("https://www.i.ua/");
+            LoginPage loginPage = new LoginPage();
+            EmailManagePage emailManagePage = loginPage.Login(loginPage.myLogin, loginPage.myPassword);
+            emailManagePage.EditDraftdEmail(emailManagePage.editText);
         }
 
-        //3.2
-        [Test]
-        public void DeleteEmail()
+        [TestCase("cat", ExpectedResult = "Katze")]
+        [TestCase("dog", ExpectedResult = "Hund")]
+
+
+        public string TranslateEnToGerTest(string text)
+        {            
+            Translation translation = new Translation();
+            return translation.Translate(text, translation.enToDeURL);
+        }
+
+
+      
+
+        [TestCase("Katze", ExpectedResult = "chat")]
+        [TestCase("Hund", ExpectedResult = "chien")]
+
+        public string TranslateDeToFRTest(string text)
         {
-            driver.Navigate().GoToUrl("https://www.i.ua/");
+            Translation translation = new Translation();
+            return translation.Translate(text, translation.deToFrURL);
+        }
 
-            IWebElement passwordInput = driver.FindElement(By.Name("pass"));
-            IWebElement loginInput = driver.FindElement(By.Name("login"));
-            IWebElement loginButton = driver.FindElement(By.CssSelector("input[value='Увійти']"));
 
-            string myLogin = "Vasillsa@email.ua";
-            string myPassword = "qwerty123!";
-            string title = "Вхідні - I.UA ";
+        [TestCase("cat", ExpectedResult = "chatte(feminine)")]
+        [TestCase("dog", ExpectedResult = "chienne(feminine)")]
 
-            loginInput.SendKeys(myLogin);
-            passwordInput.SendKeys(myPassword);
-            loginButton.Click();
-
-            Assert.AreEqual(title, driver.Title);
-
-            IWebElement element = driver.FindElement(By.Name("list[]"));
-            element.Click();
-           
-
-            int numberOfElements = driver.FindElements(By.XPath("//form[@name='aform']/div")).Count;
-
-            IWebElement deleteButton = driver.FindElement(By.XPath("(//span[@buttonname='del'])[first()]"));
-            deleteButton.Click();
-
-            IAlert confirmationAlert = driver.SwitchTo().Alert();
-            confirmationAlert.Accept();
-
-           
-            int countOfEmailsAfterDeliting = driver.FindElements(By.XPath("//form[@name='aform']/div")).Count;
-
-            Assert.AreEqual(numberOfElements - 1 , countOfEmailsAfterDeliting);
-
-        }      
-
-       
-        //3.3
-
-        [Test]
-        public void HandlingMultipleWindows()
+        public string TranslateEnToFRTest(string text)
         {
-            string url = "https://www.i.ua/";
+            Translation translation = new Translation();
+            return translation.Translate(text, translation.enToFrURL);
+        }
 
-            driver.Navigate().GoToUrl(url);
 
-            IWebElement passwordInput = driver.FindElement(By.Name("pass"));
-            IWebElement loginInput = driver.FindElement(By.Name("login"));
-            IWebElement loginButton = driver.FindElement(By.CssSelector("input[value='Увійти']"));
 
-            string myLogin = "Vasillsa@email.ua";
-            string myPassword = "qwerty123!";
-            string title = "Вхідні - I.UA ";
-            string titleOfPageAfterExit = "Пошта - електронна пошта з доменами @i.ua, @ua.fm і @email.ua, створіть собі e-mail адресу на нашому порталі";
-            
-            loginInput.SendKeys(myLogin);
-            passwordInput.SendKeys(myPassword);
-            loginButton.Click();
 
-            Assert.AreEqual(title, driver.Title);
-
-            ((IJavaScriptExecutor)driver).ExecuteScript("window.open();");
-            driver.SwitchTo().Window(driver.WindowHandles.Last());
-            driver.Navigate().GoToUrl(url);
-            
-            IWebElement exitButton = driver.FindElement(By.XPath("//a[contains(text(),'Вихід')]"));
-            exitButton.Click();
-
-            driver.SwitchTo().Window(driver.WindowHandles.First());
-
-            driver.Navigate().Refresh();           
-
-            Assert.AreEqual(titleOfPageAfterExit, driver.Title.Trim());
-
-        }      
 
         [TearDown]
-        public void AfterTests()
+        public void AfterTest()
         {
-            driver.Quit();
+           
         }
 
+        [OneTimeTearDown]
 
-
+        public void AfterTests()
+        {
+            InstanceOfDriver.driver.Quit();
+        }
 
     }
 
