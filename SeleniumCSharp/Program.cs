@@ -19,8 +19,7 @@ namespace SeleniumCSharp
               
     }
     class Tests
-    {
-       
+    {       
 
         [OneTimeSetUp]        
         public void Before()
@@ -44,19 +43,8 @@ namespace SeleniumCSharp
             EmailManagePage emailManagePage = loginPage.Login(loginPage.myLogin, loginPage.myPassword);
             emailManagePage.CheckTitleOnThePage(emailManagePage.title);
             emailManagePage.CreateNewLetter(emailManagePage.sendTo, emailManagePage.subject, emailManagePage.emailText);
+            loginPage.LogOut();
         }
-
-        [Test]
-        public void VerifySubjectAfterEdit()
-        {
-
-        }
-
-        public void VerifyBodyAfterEdit()
-        {
-
-        }
-
 
         [Test]
         public void EditEmailAllFields()
@@ -65,12 +53,41 @@ namespace SeleniumCSharp
             LoginPage loginPage = new LoginPage();
             EmailManagePage emailManagePage = loginPage.Login(loginPage.myLogin, loginPage.myPassword);
             emailManagePage.EditDraftdEmail(emailManagePage.editText);
+            loginPage.LogOut();
         }
+
+        [Test]
+        public void VerifySendToAfterEdit()
+        {
+            CustomMethods.OpenSite("https://www.i.ua/");
+            LoginPage loginPage = new LoginPage();
+            EmailManagePage emailManagePage = loginPage.Login(loginPage.myLogin, loginPage.myPassword);            
+            emailManagePage.VerifySendToFieldAfterEdit();
+            loginPage.LogOut();
+        }
+
+        [Test]
+        public void VerifySubjectAfterEdit()
+        {
+            CustomMethods.OpenSite("https://www.i.ua/");
+            LoginPage loginPage = new LoginPage();
+            EmailManagePage emailManagePage = loginPage.Login(loginPage.myLogin, loginPage.myPassword);            
+            emailManagePage.VerifySubjectFieldAfterEdit();
+            loginPage.LogOut();
+        }
+
+        [Test]
+        public void VerifyBodyAfterEdit()
+        {
+            CustomMethods.OpenSite("https://www.i.ua/");
+            LoginPage loginPage = new LoginPage();
+            EmailManagePage emailManagePage = loginPage.Login(loginPage.myLogin, loginPage.myPassword);            
+            emailManagePage.VerifyBodyFieldAfterEdit();
+            loginPage.LogOut();
+        }      
 
         [TestCase("cat", ExpectedResult = "Katze")]
         [TestCase("dog", ExpectedResult = "Hund")]
-
-
         public string TranslateEnToGerTest(string text)
         {            
             Translation translation = new Translation();
@@ -82,7 +99,6 @@ namespace SeleniumCSharp
 
         [TestCase("Katze", ExpectedResult = "chat")]
         [TestCase("Hund", ExpectedResult = "chien")]
-
         public string TranslateDeToFRTest(string text)
         {
             Translation translation = new Translation();
@@ -92,16 +108,11 @@ namespace SeleniumCSharp
 
         [TestCase("cat", ExpectedResult = "chatte(feminine)")]
         [TestCase("dog", ExpectedResult = "chienne(feminine)")]
-
         public string TranslateEnToFRTest(string text)
         {
             Translation translation = new Translation();
             return translation.Translate(text, translation.enToFrURL);
         }
-
-
-
-
 
         [TearDown]
         public void AfterTest()
@@ -110,7 +121,6 @@ namespace SeleniumCSharp
         }
 
         [OneTimeTearDown]
-
         public void AfterTests()
         {
             InstanceOfDriver.driver.Quit();

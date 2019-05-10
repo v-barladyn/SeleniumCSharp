@@ -13,7 +13,7 @@ namespace SeleniumCSharp
     {
         public static void WaitForElement(string xpath)
         {
-            WebDriverWait wait = new WebDriverWait(InstanceOfDriver.driver, TimeSpan.FromMilliseconds(2000));
+            WebDriverWait wait = new WebDriverWait(InstanceOfDriver.driver, TimeSpan.FromMilliseconds(4000));
             wait.Until(ExpectedConditions.VisibilityOfAllElementsLocatedBy(By.XPath(xpath)));
             
         }

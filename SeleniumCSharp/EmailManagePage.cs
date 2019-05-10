@@ -43,7 +43,15 @@ namespace SeleniumCSharp
         IWebElement draftEmails { get; set; }
 
         [FindsBy(How = How.XPath, Using = "//span[contains(text(),'qwerty@gmail.com')]")]
-        IWebElement saveDraftdEmail { get; set; }
+        IWebElement savedDraftdEmail { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//span[contains(text(),'qwerty@gmail.com')]/ancestor::a/ancestor::div/span")]
+        IWebElement includeCheckBoxForManageEmail { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//span[@buttonname='del'])[first()]")]
+        IWebElement deleteButton { get; set; }
+
+       
 
 
 
@@ -73,13 +81,28 @@ namespace SeleniumCSharp
             this.SaveInDraft.Click();            
             CustomMethods.WaitForElement(this.xpath);
 
-            Assert.AreEqual(this.emailWasCreated, this.NoticeLetterWasCreated.Text.Trim());
+            Assert.AreEqual(this.emailWasCreated, this.NoticeLetterWasCreated.Text.Trim()); 
+                     
         }
+
+        public void DeleteEmail()
+        {
+            this.draftEmails.Click();
+            this.includeCheckBoxForManageEmail.Click();         
+            this.deleteButton.Click();
+            IAlert confirmationAlert = InstanceOfDriver.driver.SwitchTo().Alert();
+
+            Assert.False(includeCheckBoxForManageEmail.Displayed);
+
+        }
+
+
+
 
         public void EditDraftdEmail(string text)
         {
             this.draftEmails.Click();
-            this.saveDraftdEmail.Click();
+            this.savedDraftdEmail.Click();
             this.sendEmailTo.SendKeys(text);
             this.sendEmailSubject.SendKeys(text);
             this.sendEmailBody.SendKeys(text);
@@ -88,6 +111,29 @@ namespace SeleniumCSharp
             CustomMethods.WaitForElement(this.xpath);
 
             Assert.AreEqual(this.emailWasCreated, this.NoticeLetterWasCreated.Text.Trim());
+        }
+
+        public void VerifySendToFieldAfterEdit()
+        {
+            this.draftEmails.Click();
+            this.savedDraftdEmail.Click();                
+
+            Assert.AreEqual(this.sendTo + this.editText, this.sendEmailTo.Text.Trim());
+        }
+
+        public void VerifySubjectFieldAfterEdit()
+        {
+            this.draftEmails.Click();
+            this.savedDraftdEmail.Click();
+
+            Assert.AreEqual(this.subject + this.editText, this.sendEmailSubject.GetAttribute("value"));
+        }
+        public void VerifyBodyFieldAfterEdit()
+        {
+            this.draftEmails.Click();
+            this.savedDraftdEmail.Click();
+
+            Assert.AreEqual(this.emailText + "\r\n" + this.editText, this.sendEmailBody.Text.Trim());
         }
     }
 }

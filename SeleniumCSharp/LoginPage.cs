@@ -26,22 +26,39 @@ namespace SeleniumCSharp
         [FindsBy(How = How.CssSelector, Using = @"input[value='Увійти']")]
         IWebElement loginButton { get; set; }
 
+        [FindsBy(How = How.XPath, Using = "//a[contains(text(),'Вихід')]")]
+        IWebElement exitButton1 { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//span[@title='Налаштування']")]
+        IWebElement settingButton { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//div/ul/li/a[contains(text(),'Вийти')]")]
+        IWebElement exitButton { get; set; }
+
         public string myLogin = "Vasillsa@email.ua";
         public string myPassword = "qwerty123!";
+        public string xpath = "//div/ul/li/a[contains(text(),'Вийти')]";        
+        string titleOfPageAfterExit = "І.UA - твоя пошта";
 
 
         public EmailManagePage Login(string login,string password)
         {
             loginInput.SendKeys(login);
             passwordInput.SendKeys(password);
-            loginButton.Click();
+            loginButton.Click();         
 
             return new EmailManagePage();
 
         }
-           
-            
 
-           
+        public void LogOut()
+        {            
+            this.settingButton.Click();
+            CustomMethods.WaitForElement(xpath);
+            this.exitButton.Click();
+
+            Assert.AreEqual(this.titleOfPageAfterExit, InstanceOfDriver.driver.Title.Trim());
+        }
+
     }
 }
