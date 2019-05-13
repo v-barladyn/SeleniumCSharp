@@ -11,10 +11,9 @@ using System.Linq;
 namespace SeleniumCSharp.Tests
 {
     class TranslationTests
-    { 
-       
-
-            [OneTimeSetUp]
+    {
+     
+        [OneTimeSetUp]
             public void Before()
             {
                 InstanceOfDriver.driver = new ChromeDriver();
@@ -28,34 +27,17 @@ namespace SeleniumCSharp.Tests
 
             }
 
-          
-
-            [TestCase("cat", ExpectedResult = "Katze")]
-            [TestCase("dog", ExpectedResult = "Hund")]
-            public string TranslateEnToGerTest(string text)
-            {
-                Translation translation = new Translation();
-                return translation.Translate(text, translation.enToDeURL);
-            }
-
-
-
-            [TestCase("Katze", ExpectedResult = "chat")]
-            [TestCase("Hund", ExpectedResult = "chien")]
-            public string TranslateDeToFRTest(string text)
-            {
-                Translation translation = new Translation();
-                return translation.Translate(text, translation.deToFrURL);
-            }
-
-
-            [TestCase("cat", ExpectedResult = "chatte(feminine)")]
-            [TestCase("dog", ExpectedResult = "chienne(feminine)")]
-            public string TranslateEnToFRTest(string text)
-            {
-                Translation translation = new Translation();
-                return translation.Translate(text, translation.enToFrURL);
-            }
+        [TestCase("cat", "en", "de",  ExpectedResult = "Katze")]
+        [TestCase("dog", "en", "de", ExpectedResult = "Hund")]
+        [TestCase("Katze", "de", "fr", ExpectedResult = "chat")]
+        [TestCase("Hund", "de", "fr", ExpectedResult = "chien")]
+        [TestCase("cat", "en", "fr", ExpectedResult = "chatte(feminine)")]
+        [TestCase("dog", "en", "fr", ExpectedResult = "chienne(feminine)")]
+        public string Translation(string text, string from, string to)
+        {
+            Translation translation = new Translation();
+            return translation.Translate(text, from, to);
+        }      
 
             [TearDown]
             public void AfterTest()

@@ -34,22 +34,21 @@ namespace SeleniumCSharp
         [FindsBy(How = How.XPath, Using = "//div[@class='text-wrap tlid-copy-target']")]
         IWebElement OutputField;
         
-        
 
-        public string enToDeURL = "https://translate.google.com/#view=home&op=translate&sl=en&tl=de";
-        public string enToFrURL = "https://translate.google.com/#view=home&op=translate&sl=en&tl=fr";
-        public string deToFrURL = "https://translate.google.com/#view=home&op=translate&sl=de&tl=fr";
+        public string url = "https://translate.google.com/#view=home&op=translate&sl=";
+        public string partOfUrl = "&tl=";       
 
 
-        public string Translate(string text, string url)
+        public string Translate(string text, string from, string to)
         {
-            CustomMethods.OpenSite(url);          
+            CustomMethods.OpenSite(this.url + from + this.partOfUrl + to);
+            Console.WriteLine(this.url + from + this.partOfUrl + to);
             this.InputField.SendKeys(text);
             CustomMethods.WaitForElement(this.OutputField);
             Console.WriteLine(this.OutputField.Text);
             return this.OutputField.Text;
-          
-        }  
+
+        }
 
 
     }
