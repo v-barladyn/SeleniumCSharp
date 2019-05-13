@@ -30,8 +30,7 @@ namespace SeleniumCSharp.Tests
         public void CreateNewEmail()
         {
             LoginPage loginPage = new LoginPage();
-            EmailManagePage emailManagePage = loginPage.Login(loginPage.myLogin, loginPage.myPassword);
-            emailManagePage.CheckTitleOnThePage(emailManagePage.title);
+            EmailManagePage emailManagePage = loginPage.Login(loginPage.myLogin, loginPage.myPassword);           
             emailManagePage.CreateNewLetter(emailManagePage.sendTo, emailManagePage.subject, emailManagePage.emailText);
             loginPage.LogOut();
         }
@@ -44,6 +43,7 @@ namespace SeleniumCSharp.Tests
             emailManagePage.EditDraftdEmail(emailManagePage.editText);
             loginPage.LogOut();
         }
+       
 
         [Test]
         public void VerifySendToAfterEdit()

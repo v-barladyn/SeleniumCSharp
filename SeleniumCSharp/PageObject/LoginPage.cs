@@ -38,13 +38,16 @@ namespace SeleniumCSharp
         public string myLogin = "Vasillsa@email.ua";
         public string myPassword = "qwerty123!";              
         string titleOfPageAfterExit = "І.UA - твоя пошта";
+        string loginTitle = "Вхідні - I.UA";
 
 
         public EmailManagePage Login(string login,string password)
         {
             LoginInput.SendKeys(login);
             PasswordInput.SendKeys(password);
-            LoginButton.Click();             
+            LoginButton.Click();
+
+            Assert.AreEqual(this.loginTitle, InstanceOfDriver.driver.Title.Trim());
 
             return new EmailManagePage();
 

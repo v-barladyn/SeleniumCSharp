@@ -80,7 +80,7 @@ namespace SeleniumCSharp
             Assert.AreEqual(this.emailWasCreated, this.NoticeLetterWasCreated.Text.Trim()); 
                      
         }
-
+        
         public void DeleteEmail()
         {
             this.draftEmails.Click();
@@ -89,6 +89,7 @@ namespace SeleniumCSharp
 
             IAlert confirmationAlert = InstanceOfDriver.driver.SwitchTo().Alert();
 
+            CheckTitleOnThePage(this.title);
             Assert.False(includeCheckBoxForManageEmail.Displayed);
 
         }
