@@ -33,9 +33,7 @@ namespace SeleniumCSharp
     
         [FindsBy(How = How.XPath, Using = "//div[@class='text-wrap tlid-copy-target']")]
         IWebElement outputField { get; set; }
-
-
-        string xpath = "//div[@class='text-wrap tlid-copy-target']";  
+        
         
 
         public string enToDeURL = "https://translate.google.com/#view=home&op=translate&sl=en&tl=de";
@@ -47,7 +45,7 @@ namespace SeleniumCSharp
         {
             CustomMethods.OpenSite(url);          
             this.inputField.SendKeys(text);
-            CustomMethods.WaitForElement(this.xpath);
+            CustomMethods.WaitForElement(this.outputField);
             Console.WriteLine(this.outputField.Text);
             return this.outputField.Text;
           

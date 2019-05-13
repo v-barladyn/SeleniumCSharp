@@ -36,8 +36,7 @@ namespace SeleniumCSharp
         IWebElement exitButton { get; set; }
 
         public string myLogin = "Vasillsa@email.ua";
-        public string myPassword = "qwerty123!";
-        public string xpath = "//div/ul/li/a[contains(text(),'Вийти')]";        
+        public string myPassword = "qwerty123!";              
         string titleOfPageAfterExit = "І.UA - твоя пошта";
 
 
@@ -54,7 +53,7 @@ namespace SeleniumCSharp
         public void LogOut()
         {            
             this.settingButton.Click();
-            CustomMethods.WaitForElement(xpath);
+            CustomMethods.WaitForElement(this.exitButton);
             this.exitButton.Click();
 
             Assert.AreEqual(this.titleOfPageAfterExit, InstanceOfDriver.driver.Title.Trim());

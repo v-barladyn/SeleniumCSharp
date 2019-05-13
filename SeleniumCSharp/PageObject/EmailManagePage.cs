@@ -50,15 +50,10 @@ namespace SeleniumCSharp
 
         [FindsBy(How = How.XPath, Using = "//span[@buttonname='del'])[first()]")]
         IWebElement deleteButton { get; set; }
-
        
-
-
-
-        string xpath = "//div[contains(text(),'Лист успішно збережено')]";
+               
+        
         public string editText = "edit";
-
-
         public string title = "Вхідні - I.UA ";
         public string sendTo = "qwerty@gmail.com";
         public string subject = "Subject";
@@ -78,8 +73,9 @@ namespace SeleniumCSharp
             this.sendEmailTo.SendKeys(sendTo);
             this.sendEmailSubject.SendKeys(subject);
             this.sendEmailBody.SendKeys(text);
-            this.SaveInDraft.Click();            
-            CustomMethods.WaitForElement(this.xpath);
+            this.SaveInDraft.Click();
+            
+            CustomMethods.WaitForElement(this.NoticeLetterWasCreated);
 
             Assert.AreEqual(this.emailWasCreated, this.NoticeLetterWasCreated.Text.Trim()); 
                      
@@ -90,6 +86,7 @@ namespace SeleniumCSharp
             this.draftEmails.Click();
             this.includeCheckBoxForManageEmail.Click();         
             this.deleteButton.Click();
+
             IAlert confirmationAlert = InstanceOfDriver.driver.SwitchTo().Alert();
 
             Assert.False(includeCheckBoxForManageEmail.Displayed);
@@ -106,9 +103,9 @@ namespace SeleniumCSharp
             this.sendEmailTo.SendKeys(text);
             this.sendEmailSubject.SendKeys(text);
             this.sendEmailBody.SendKeys(text);
-
             this.SaveInDraft.Click();
-            CustomMethods.WaitForElement(this.xpath);
+
+            CustomMethods.WaitForElement(this.NoticeLetterWasCreated);
 
             Assert.AreEqual(this.emailWasCreated, this.NoticeLetterWasCreated.Text.Trim());
         }
