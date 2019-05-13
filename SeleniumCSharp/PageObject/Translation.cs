@@ -17,22 +17,22 @@ namespace SeleniumCSharp
         }
 
         [FindsBy(How = How.XPath, Using = "//div[@class='sl-more tlid-open-source-language-list']")]
-        IWebElement selectSourceLanguage { get; set; }
+        IWebElement SelectSourceLanguage;
 
         [FindsBy(How = How.XPath, Using = "//div[contains(text(),'англійська')]")]
-        IWebElement en { get; set; }
+        IWebElement En;
 
         [FindsBy(How = How.XPath, Using = "//div[@class='tl - more tlid - open - target - language - list']")]
-        IWebElement selecTargetLanguage { get; set; }
+        IWebElement SelecTargetLanguage;
 
         [FindsBy(How = How.XPath, Using = "//div[contains(text(),'німецька')]")]
-        IWebElement de { get; set; }
+        IWebElement De;
 
         [FindsBy(How = How.Id, Using = "source")]
-        IWebElement inputField { get; set; }
-    
+        IWebElement InputField;
+
         [FindsBy(How = How.XPath, Using = "//div[@class='text-wrap tlid-copy-target']")]
-        IWebElement outputField { get; set; }
+        IWebElement OutputField;
         
         
 
@@ -44,14 +44,12 @@ namespace SeleniumCSharp
         public string Translate(string text, string url)
         {
             CustomMethods.OpenSite(url);          
-            this.inputField.SendKeys(text);
-            CustomMethods.WaitForElement(this.outputField);
-            Console.WriteLine(this.outputField.Text);
-            return this.outputField.Text;
+            this.InputField.SendKeys(text);
+            CustomMethods.WaitForElement(this.OutputField);
+            Console.WriteLine(this.OutputField.Text);
+            return this.OutputField.Text;
           
-        }
-
-      
+        }  
 
 
     }

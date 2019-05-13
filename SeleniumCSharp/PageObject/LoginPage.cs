@@ -16,24 +16,24 @@ namespace SeleniumCSharp
         {
             PageFactory.InitElements(InstanceOfDriver.driver, this);
         }
-       
-        [FindsBy(How = How.Name, Using ="pass")]
-        IWebElement passwordInput { get; set; }
+
+        [FindsBy(How = How.Name, Using = "pass")]
+        IWebElement PasswordInput;
 
         [FindsBy(How = How.Name, Using = "login")]
-        IWebElement loginInput { get; set; }
-        
+        IWebElement LoginInput;
+
         [FindsBy(How = How.CssSelector, Using = @"input[value='Увійти']")]
-        IWebElement loginButton { get; set; }
+        IWebElement LoginButton;
 
         [FindsBy(How = How.XPath, Using = "//a[contains(text(),'Вихід')]")]
-        IWebElement exitButton1 { get; set; }
+        IWebElement ExitButton1;
 
         [FindsBy(How = How.XPath, Using = "//span[@title='Налаштування']")]
-        IWebElement settingButton { get; set; }
+        IWebElement SettingButton;
 
         [FindsBy(How = How.XPath, Using = "//div/ul/li/a[contains(text(),'Вийти')]")]
-        IWebElement exitButton { get; set; }
+        IWebElement ExitButton;
 
         public string myLogin = "Vasillsa@email.ua";
         public string myPassword = "qwerty123!";              
@@ -42,9 +42,9 @@ namespace SeleniumCSharp
 
         public EmailManagePage Login(string login,string password)
         {
-            loginInput.SendKeys(login);
-            passwordInput.SendKeys(password);
-            loginButton.Click();         
+            LoginInput.SendKeys(login);
+            PasswordInput.SendKeys(password);
+            LoginButton.Click();             
 
             return new EmailManagePage();
 
@@ -52,9 +52,9 @@ namespace SeleniumCSharp
 
         public void LogOut()
         {            
-            this.settingButton.Click();
-            CustomMethods.WaitForElement(this.exitButton);
-            this.exitButton.Click();
+            this.SettingButton.Click();
+            CustomMethods.WaitForElement(this.ExitButton);
+            this.ExitButton.Click();
 
             Assert.AreEqual(this.titleOfPageAfterExit, InstanceOfDriver.driver.Title.Trim());
         }
