@@ -7,6 +7,7 @@ using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Interactions;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Configuration;
 
 namespace SeleniumCSharp.Tests
 {
@@ -23,7 +24,7 @@ namespace SeleniumCSharp.Tests
         [SetUp]
         public void BeforeEachTests()
         {
-            CustomMethods.OpenSite("https://www.i.ua/");
+            CustomMethods.OpenSite(ConfigurationManager.AppSettings["urlForEmail"]);
         }
 
         [Test]
