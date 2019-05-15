@@ -8,30 +8,32 @@ using OpenQA.Selenium.Interactions;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Configuration;
+using SeleniumCSharp.WrapperFactory;
 
 namespace SeleniumCSharp.Tests
 {
     class EmailsManagingTests
     {
+      
 
         [OneTimeSetUp]
         public void Before()
         {
-            InstanceOfDriver.driver = new ChromeDriver();
-            InstanceOfDriver.driver.Manage().Window.Maximize();          
-            
+            BrowserFactory.InitBrowser(ConfigurationManager.AppSettings["browser"]);
+            BrowserFactory.Driver.Manage().Window.Maximize();          
+
         }
         [SetUp]
         public void BeforeEachTests()
         {
-            CustomMethods.OpenSite(ConfigurationManager.AppSettings["urlForEmail"]);
+            BrowserFactory.LoadApplication(ConfigurationManager.AppSettings["urlForEmail"]);
         }
 
         [Test]
         public void CreateNewEmail()
         {
             LoginPage loginPage = new LoginPage();
-            EmailManagePage emailManagePage = loginPage.Login(loginPage.myLogin, loginPage.myPassword);           
+            EmailManagePage emailManagePage = loginPage.Login(ConfigurationManager.AppSettings["login"], ConfigurationManager.AppSettings["password"]);           
             emailManagePage.CreateNewLetter(emailManagePage.sendTo, emailManagePage.subject, emailManagePage.emailText);
             loginPage.LogOut();
         }
@@ -40,7 +42,7 @@ namespace SeleniumCSharp.Tests
         public void EditEmailAllFields()
         {
             LoginPage loginPage = new LoginPage();
-            EmailManagePage emailManagePage = loginPage.Login(loginPage.myLogin, loginPage.myPassword);
+            EmailManagePage emailManagePage = loginPage.Login(ConfigurationManager.AppSettings["login"], ConfigurationManager.AppSettings["password"]);
             emailManagePage.EditDraftdEmail(emailManagePage.editText);
             loginPage.LogOut();
         }
@@ -50,7 +52,7 @@ namespace SeleniumCSharp.Tests
         public void VerifySendToAfterEdit()
         {
             LoginPage loginPage = new LoginPage();
-            EmailManagePage emailManagePage = loginPage.Login(loginPage.myLogin, loginPage.myPassword);
+            EmailManagePage emailManagePage = loginPage.Login(ConfigurationManager.AppSettings["login"], ConfigurationManager.AppSettings["password"]);
             emailManagePage.VerifySendToFieldAfterEdit();
             loginPage.LogOut();
         }
@@ -59,7 +61,7 @@ namespace SeleniumCSharp.Tests
         public void VerifySubjectAfterEdit()
         {
             LoginPage loginPage = new LoginPage();
-            EmailManagePage emailManagePage = loginPage.Login(loginPage.myLogin, loginPage.myPassword);
+            EmailManagePage emailManagePage = loginPage.Login(ConfigurationManager.AppSettings["login"], ConfigurationManager.AppSettings["password"]);
             emailManagePage.VerifySubjectFieldAfterEdit();
             loginPage.LogOut();
         }
@@ -68,10 +70,10 @@ namespace SeleniumCSharp.Tests
         public void VerifyBodyAfterEdit()
         {
             LoginPage loginPage = new LoginPage();
-            EmailManagePage emailManagePage = loginPage.Login(loginPage.myLogin, loginPage.myPassword);
+            EmailManagePage emailManagePage = loginPage.Login(ConfigurationManager.AppSettings["login"], ConfigurationManager.AppSettings["password"]);
             emailManagePage.VerifyBodyFieldAfterEdit();
             loginPage.LogOut();
-        }
+        }        
 
         [TearDown]
         public void AfterTest()
@@ -82,7 +84,7 @@ namespace SeleniumCSharp.Tests
         [OneTimeTearDown]
         public void AfterTests()
         {
-            InstanceOfDriver.driver.Quit();
+            BrowserFactory.Driver.Quit();
         }
 
     }

@@ -8,6 +8,7 @@ using OpenQA.Selenium.Support.PageObjects;
 using OpenQA.Selenium;
 using NUnit.Framework;
 using OpenQA.Selenium.Support.UI;
+using SeleniumCSharp.WrapperFactory;
 
 namespace SeleniumCSharp
 {
@@ -15,7 +16,7 @@ namespace SeleniumCSharp
     {
         public EmailManagePage()
         {
-            PageFactory.InitElements(InstanceOfDriver.driver, this);
+            PageFactory.InitElements(BrowserFactory.Driver, this);
         }
 
         [FindsBy(How = How.Name, Using = "list[]")]
@@ -64,7 +65,7 @@ namespace SeleniumCSharp
 
         public void CheckTitleOnThePage(string title)
         {
-            Assert.AreEqual(this.title, InstanceOfDriver.driver.Title);
+            Assert.AreEqual(this.title, BrowserFactory.Driver.Title);
         }
 
         public void CreateNewLetter(string sendTo, string subject, string text)
@@ -87,7 +88,7 @@ namespace SeleniumCSharp
             this.includeCheckBoxForManageEmail.Click();         
             this.deleteButton.Click();
 
-            IAlert confirmationAlert = InstanceOfDriver.driver.SwitchTo().Alert();
+            IAlert confirmationAlert = BrowserFactory.Driver.SwitchTo().Alert();
 
             CheckTitleOnThePage(this.title);
             Assert.False(includeCheckBoxForManageEmail.Displayed);

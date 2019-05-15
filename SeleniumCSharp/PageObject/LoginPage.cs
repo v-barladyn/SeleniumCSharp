@@ -7,6 +7,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Support.PageObjects;
+using SeleniumCSharp.WrapperFactory;
 
 namespace SeleniumCSharp
 {
@@ -14,7 +15,7 @@ namespace SeleniumCSharp
     {
         public LoginPage()
         {
-            PageFactory.InitElements(InstanceOfDriver.driver, this);
+            PageFactory.InitElements(BrowserFactory.Driver, this);
         }
 
         [FindsBy(How = How.Name, Using = "pass")]
@@ -35,8 +36,7 @@ namespace SeleniumCSharp
         [FindsBy(How = How.XPath, Using = "//div/ul/li/a[contains(text(),'Вийти')]")]
         IWebElement ExitButton;
 
-        public string myLogin = "Vasillsa@email.ua";
-        public string myPassword = "qwerty123!";              
+                     
         string titleOfPageAfterExit = "І.UA - твоя пошта";
         string loginTitle = "Вхідні - I.UA";
 
@@ -47,7 +47,7 @@ namespace SeleniumCSharp
             PasswordInput.SendKeys(password);
             LoginButton.Click();
 
-            Assert.AreEqual(this.loginTitle, InstanceOfDriver.driver.Title.Trim());
+            Assert.AreEqual(this.loginTitle, BrowserFactory.Driver.Title.Trim());
 
             return new EmailManagePage();
 
@@ -59,7 +59,7 @@ namespace SeleniumCSharp
             CustomMethods.WaitForElement(this.ExitButton);
             this.ExitButton.Click();
 
-            Assert.AreEqual(this.titleOfPageAfterExit, InstanceOfDriver.driver.Title.Trim());
+            Assert.AreEqual(this.titleOfPageAfterExit, BrowserFactory.Driver.Title.Trim());
         }
 
     }

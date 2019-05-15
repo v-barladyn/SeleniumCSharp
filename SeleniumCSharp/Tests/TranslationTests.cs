@@ -7,6 +7,8 @@ using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Interactions;
 using System.Collections.ObjectModel;
 using System.Linq;
+using SeleniumCSharp.WrapperFactory;
+using System.Configuration;
 
 namespace SeleniumCSharp.Tests
 {
@@ -16,11 +18,11 @@ namespace SeleniumCSharp.Tests
         [OneTimeSetUp]
             public void Before()
             {
-                InstanceOfDriver.driver = new ChromeDriver();
-                InstanceOfDriver.driver.Manage().Window.Maximize();
+                BrowserFactory.InitBrowser(ConfigurationManager.AppSettings["browser"]);
+                BrowserFactory.Driver.Manage().Window.Maximize();
 
 
-            }
+        }
             [SetUp]
             public void BeforeEachTests()
             {
@@ -48,7 +50,9 @@ namespace SeleniumCSharp.Tests
             [OneTimeTearDown]
             public void AfterTests()
             {
-                InstanceOfDriver.driver.Quit();
+
+            BrowserFactory.Driver.Quit();
+
             }
 
         }

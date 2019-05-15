@@ -59,13 +59,13 @@
   <ItemGroup>
     <Compile Include="CustomMethods\CustomMethods.cs" />
     <Compile Include="PageObject\EmailManagePage.cs" />
-    <Compile Include="InstanceOfDriver\InstanceOfDriver.cs" />
     <Compile Include="PageObject\LoginPage.cs" />
     <Compile Include="Tests\EmailsManagingTests.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Tests\TranslationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PageObject\Translation.cs" />
+    <Compile Include="WrapperFactory\BrowserFactory .cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
