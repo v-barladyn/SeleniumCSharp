@@ -9,6 +9,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using SeleniumCSharp.WrapperFactory;
 using System.Configuration;
+using NUnit.Framework.Interfaces;
+using System.Text.RegularExpressions;
 
 namespace SeleniumCSharp.Tests
 {
@@ -29,7 +31,7 @@ namespace SeleniumCSharp.Tests
 
             }
 
-        [TestCase("cat", "en", "de",  ExpectedResult = "Katze")]
+        [TestCase("cat", "en", "de",  ExpectedResult = "Katz")]
         [TestCase("dog", "en", "de", ExpectedResult = "Hund")]
         [TestCase("Katze", "de", "fr", ExpectedResult = "chat")]
         [TestCase("Hund", "de", "fr", ExpectedResult = "chien")]
@@ -42,9 +44,12 @@ namespace SeleniumCSharp.Tests
         }      
 
             [TearDown]
-            public void AfterTest()
+            public void AfterTest( )
             {
-
+               if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
+               {
+                    CustomMethods.MakeScreenshot(ConfigurationManager.AppSettings["filePath"]);                  
+               }
             }
 
             [OneTimeTearDown]

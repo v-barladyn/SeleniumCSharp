@@ -24,5 +24,14 @@ namespace SeleniumCSharp
             Assert.AreEqual(url, BrowserFactory.Driver.Url);
         }
 
+        public static void MakeScreenshot(string filePath)
+        {
+            Screenshot ss = ((ITakesScreenshot)BrowserFactory.Driver).GetScreenshot();
+            string title = TestContext.CurrentContext.Test.Name.Replace("\"", "_").Replace(',', '_');        
+            string screenshotfilename = filePath + title + title + DateTime.Now.ToString("yyyy-MM-dd-HH_mm_ss") + ".jpg";
+            ss.SaveAsFile(screenshotfilename, ScreenshotImageFormat.Jpeg);
+        }
+       
+
     }
 }

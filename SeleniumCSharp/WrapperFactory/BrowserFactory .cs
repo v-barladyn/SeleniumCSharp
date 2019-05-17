@@ -2,8 +2,10 @@
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
+using OpenQA.Selenium.Support.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Drawing.Imaging;
 
 namespace SeleniumCSharp.WrapperFactory
 {
@@ -62,5 +64,6 @@ namespace SeleniumCSharp.WrapperFactory
                 Drivers[key].Quit();
             }
         }
+  
     }
 }

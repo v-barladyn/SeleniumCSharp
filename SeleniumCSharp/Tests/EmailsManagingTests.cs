@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Configuration;
 using SeleniumCSharp.WrapperFactory;
+using NUnit.Framework.Interfaces;
 
 namespace SeleniumCSharp.Tests
 {
@@ -78,7 +79,10 @@ namespace SeleniumCSharp.Tests
         [TearDown]
         public void AfterTest()
         {
-
+            if (TestContext.CurrentContext.Result.Outcome.Status == TestStatus.Failed)
+            {
+                CustomMethods.MakeScreenshot(ConfigurationManager.AppSettings["filePath"]);
+            }
         }
 
         [OneTimeTearDown]
