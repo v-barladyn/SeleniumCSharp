@@ -4,8 +4,10 @@ using OpenQA.Selenium.Support.UI;
 using SeleniumCSharp.WrapperFactory;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SeleniumCSharp
@@ -30,6 +32,24 @@ namespace SeleniumCSharp
             string title = TestContext.CurrentContext.Test.Name.Replace("\"", "_").Replace(',', '_');        
             string screenshotfilename = filePath + title + title + DateTime.Now.ToString("yyyy-MM-dd-HH_mm_ss") + ".jpg";
             ss.SaveAsFile(screenshotfilename, ScreenshotImageFormat.Jpeg);
+        }
+
+        public static void WaitUntilFileDownloaded(string filePath, string fileName)
+        {
+            var downloadsPath = filePath + fileName;
+            for (var i = 0; i < 30; i++)
+            {
+                if (File.Exists(downloadsPath)) { break; }
+                Thread.Sleep(1000);
+            }
+            var length = new FileInfo(downloadsPath).Length;
+            for (var i = 0; i < 30; i++)
+            {
+                Thread.Sleep(1000);
+                var newLength = new FileInfo(downloadsPath).Length;
+                if (newLength == length && length != 0) { break; }
+                length = newLength;
+            }
         }
        
 

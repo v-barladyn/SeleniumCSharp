@@ -9,6 +9,9 @@ using OpenQA.Selenium;
 using NUnit.Framework;
 using OpenQA.Selenium.Support.UI;
 using SeleniumCSharp.WrapperFactory;
+using System.Threading;
+using System.IO;
+using System.Configuration;
 
 namespace SeleniumCSharp
 {
@@ -20,19 +23,19 @@ namespace SeleniumCSharp
         }
 
         [FindsBy(How = How.Name, Using = "list[]")]
-        IWebElement element { get; set; }
+        IWebElement Element { get; set; }
 
         [FindsBy(How = How.LinkText, Using = "Створити листа")]
-        IWebElement createEmail { get; set; }
+        IWebElement CreateEmail { get; set; }
 
         [FindsBy(How = How.Name, Using = "to")]
-        IWebElement sendEmailTo { get; set; }
+        IWebElement SendEmailTo { get; set; }
 
         [FindsBy(How = How.Name, Using = "subject")]
-        IWebElement sendEmailSubject { get; set; }
+        IWebElement SendEmailSubject { get; set; }
 
         [FindsBy(How = How.Id, Using = "text")]
-        IWebElement sendEmailBody { get; set; }
+        IWebElement SendEmailBody { get; set; }
 
         [FindsBy(How = How.Name, Using = "save_in_drafts")]
         IWebElement SaveInDraft { get; set; }
@@ -41,16 +44,25 @@ namespace SeleniumCSharp
         IWebElement NoticeLetterWasCreated { get; set; }
 
         [FindsBy(How = How.XPath, Using = "//a[contains(text(),'Чернетки')]")]
-        IWebElement draftEmails { get; set; }
+        IWebElement DraftEmails { get; set; }
 
         [FindsBy(How = How.XPath, Using = "//span[contains(text(),'qwerty@gmail.com')]")]
-        IWebElement savedDraftdEmail { get; set; }
+        IWebElement SavedDraftdEmail { get; set; }
 
         [FindsBy(How = How.XPath, Using = "//span[contains(text(),'qwerty@gmail.com')]/ancestor::a/ancestor::div/span")]
-        IWebElement includeCheckBoxForManageEmail { get; set; }
+        IWebElement IncludeCheckBoxForManageEmail { get; set; }
 
         [FindsBy(How = How.XPath, Using = "//span[@buttonname='del'])[first()]")]
         IWebElement deleteButton { get; set; }
+
+        [FindsBy(How = How.XPath, Using = "//ol[@id='attached']/li/b/a")]
+        IWebElement DownloadAttach;
+
+
+        [FindsBy(How = How.Id, Using = "label_inpSourceuform_2")]
+        IWebElement CheckBox;
+
+       
        
                
         
@@ -70,10 +82,10 @@ namespace SeleniumCSharp
 
         public void CreateNewLetter(string sendTo, string subject, string text)
         {
-            this.createEmail.Click();
-            this.sendEmailTo.SendKeys(sendTo);
-            this.sendEmailSubject.SendKeys(subject);
-            this.sendEmailBody.SendKeys(text);
+            this.CreateEmail.Click();
+            this.SendEmailTo.SendKeys(sendTo);
+            this.SendEmailSubject.SendKeys(subject);
+            this.SendEmailBody.SendKeys(text);
             this.SaveInDraft.Click();
             
             CustomMethods.WaitForElement(this.NoticeLetterWasCreated);
@@ -84,14 +96,14 @@ namespace SeleniumCSharp
         
         public void DeleteEmail()
         {
-            this.draftEmails.Click();
-            this.includeCheckBoxForManageEmail.Click();         
+            this.DraftEmails.Click();
+            this.IncludeCheckBoxForManageEmail.Click();         
             this.deleteButton.Click();
 
             IAlert confirmationAlert = BrowserFactory.Driver.SwitchTo().Alert();
 
             CheckTitleOnThePage(this.title);
-            Assert.False(includeCheckBoxForManageEmail.Displayed);
+            Assert.False(IncludeCheckBoxForManageEmail.Displayed);
 
         }
 
@@ -100,11 +112,11 @@ namespace SeleniumCSharp
 
         public void EditDraftdEmail(string text)
         {
-            this.draftEmails.Click();
-            this.savedDraftdEmail.Click();
-            this.sendEmailTo.SendKeys(text);
-            this.sendEmailSubject.SendKeys(text);
-            this.sendEmailBody.SendKeys(text);
+            this.DraftEmails.Click();
+            this.SavedDraftdEmail.Click();
+            this.SendEmailTo.SendKeys(text);
+            this.SendEmailSubject.SendKeys(text);
+            this.SendEmailBody.SendKeys(text);
             this.SaveInDraft.Click();
 
             CustomMethods.WaitForElement(this.NoticeLetterWasCreated);
@@ -114,25 +126,35 @@ namespace SeleniumCSharp
 
         public void VerifySendToFieldAfterEdit()
         {
-            this.draftEmails.Click();
-            this.savedDraftdEmail.Click();                
+            this.DraftEmails.Click();
+            this.SavedDraftdEmail.Click();                
 
-            Assert.AreEqual(this.sendTo + this.editText, this.sendEmailTo.Text.Trim());
+            Assert.AreEqual(this.sendTo + this.editText, this.SendEmailTo.Text.Trim());
         }
 
         public void VerifySubjectFieldAfterEdit()
         {
-            this.draftEmails.Click();
-            this.savedDraftdEmail.Click();
+            this.DraftEmails.Click();
+            this.SavedDraftdEmail.Click();
 
-            Assert.AreEqual(this.subject + this.editText, this.sendEmailSubject.GetAttribute("value"));
+            Assert.AreEqual(this.subject + this.editText, this.SendEmailSubject.GetAttribute("value"));
         }
         public void VerifyBodyFieldAfterEdit()
         {
-            this.draftEmails.Click();
-            this.savedDraftdEmail.Click();
+            this.DraftEmails.Click();
+            this.SavedDraftdEmail.Click();
 
-            Assert.AreEqual(this.emailText + "\r\n" + this.editText, this.sendEmailBody.Text.Trim());
+            Assert.AreEqual(this.emailText + "\r\n" + this.editText, this.SendEmailBody.Text.Trim());
+        }
+
+        public void VerifyFileDownloading()
+        {
+            this.DraftEmails.Click();
+            this.SavedDraftdEmail.Click();
+            CustomMethods.WaitForElement(this.CheckBox);           
+            this.DownloadAttach.Click();
+            CustomMethods.WaitUntilFileDownloaded(ConfigurationManager.AppSettings["filePath"], this.DownloadAttach.Text);
+
         }
     }
 }

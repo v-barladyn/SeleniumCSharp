@@ -5,6 +5,7 @@ using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Support.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Drawing.Imaging;
 
 namespace SeleniumCSharp.WrapperFactory
@@ -34,9 +35,19 @@ namespace SeleniumCSharp.WrapperFactory
             {
                 case "Chrome":
                     if (driver == null)
-                    {
-                        driver = new ChromeDriver();
+                    {                        
+                        ChromeOptions chromeopt = new ChromeOptions();
+                        chromeopt.AddUserProfilePreference("plugins.always_open_pdf_externally", true);
+                        chromeopt.AddUserProfilePreference("profile.default_content_settings.popups", 0);
+                        chromeopt.AddUserProfilePreference("download.prompt_for_download", false);
+                        chromeopt.AddUserProfilePreference("download.default_directory", ConfigurationManager.AppSettings["filePath"]);
+                        chromeopt.AddUserProfilePreference("intl.accept_languages", "nl");
+                        chromeopt.AddUserProfilePreference("disable-popup-blocking", "true");
+
+                        driver = new ChromeDriver(chromeopt);
                         Drivers.Add("Chrome", Driver);
+
+
                     }
                     break;
 

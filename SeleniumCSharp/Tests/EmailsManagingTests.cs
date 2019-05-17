@@ -74,7 +74,15 @@ namespace SeleniumCSharp.Tests
             EmailManagePage emailManagePage = loginPage.Login(ConfigurationManager.AppSettings["login"], ConfigurationManager.AppSettings["password"]);
             emailManagePage.VerifyBodyFieldAfterEdit();
             loginPage.LogOut();
-        }        
+        }
+
+        [Test]
+        public void VerifyFileDownloading()
+        {
+            LoginPage loginPage = new LoginPage();            
+            EmailManagePage emailManagePage = loginPage.Login(ConfigurationManager.AppSettings["login"], ConfigurationManager.AppSettings["password"]);
+            emailManagePage.VerifyFileDownloading();
+        }
 
         [TearDown]
         public void AfterTest()
