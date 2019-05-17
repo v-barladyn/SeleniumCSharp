@@ -40,7 +40,7 @@ namespace SeleniumCSharp.WrapperFactory
                         chromeopt.AddUserProfilePreference("plugins.always_open_pdf_externally", true);
                         chromeopt.AddUserProfilePreference("profile.default_content_settings.popups", 0);
                         chromeopt.AddUserProfilePreference("download.prompt_for_download", false);
-                        chromeopt.AddUserProfilePreference("download.default_directory", ConfigurationManager.AppSettings["filePath"]);
+                        chromeopt.AddUserProfilePreference("download.default_directory","C:\\images\\");
                         chromeopt.AddUserProfilePreference("intl.accept_languages", "nl");
                         chromeopt.AddUserProfilePreference("disable-popup-blocking", "true");
 

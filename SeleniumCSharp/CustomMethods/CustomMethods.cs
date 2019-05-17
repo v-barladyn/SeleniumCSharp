@@ -20,20 +20,6 @@ namespace SeleniumCSharp
             wait.Until(p => elem.Displayed);
         }
 
-        public static void OpenSite(string url)
-        {
-            BrowserFactory.Driver.Navigate().GoToUrl(url);
-            Assert.AreEqual(url, BrowserFactory.Driver.Url);
-        }
-
-        public static void MakeScreenshot(string filePath)
-        {
-            Screenshot ss = ((ITakesScreenshot)BrowserFactory.Driver).GetScreenshot();
-            string title = TestContext.CurrentContext.Test.Name.Replace("\"", "_").Replace(',', '_');        
-            string screenshotfilename = filePath + title + title + DateTime.Now.ToString("yyyy-MM-dd-HH_mm_ss") + ".jpg";
-            ss.SaveAsFile(screenshotfilename, ScreenshotImageFormat.Jpeg);
-        }
-
         public static void WaitUntilFileDownloaded(string filePath, string fileName)
         {
             var downloadsPath = filePath + fileName;
@@ -51,7 +37,28 @@ namespace SeleniumCSharp
                 length = newLength;
             }
         }
-       
+
+        public static void OpenSite(string url)
+        {
+            BrowserFactory.Driver.Navigate().GoToUrl(url);
+            Assert.AreEqual(url, BrowserFactory.Driver.Url);
+        }
+
+        public static void MakeScreenshot(string filePath)
+        {
+            Screenshot ss = ((ITakesScreenshot)BrowserFactory.Driver).GetScreenshot();
+            string title = TestContext.CurrentContext.Test.Name.Replace("\"", "_").Replace(',', '_');        
+            string screenshotfilename = filePath + title + title + DateTime.Now.ToString("yyyy-MM-dd-HH_mm_ss") + ".jpg";
+            ss.SaveAsFile(screenshotfilename, ScreenshotImageFormat.Jpeg);
+        }
+
+        public static void UploadFile(IWebElement element, string filePath, string fileName)              
+        {            
+            element.SendKeys(filePath + fileName);
+        }
+
+
+
 
     }
 }

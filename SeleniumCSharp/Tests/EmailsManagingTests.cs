@@ -36,6 +36,8 @@ namespace SeleniumCSharp.Tests
             LoginPage loginPage = new LoginPage();
             EmailManagePage emailManagePage = loginPage.Login(ConfigurationManager.AppSettings["login"], ConfigurationManager.AppSettings["password"]);           
             emailManagePage.CreateNewLetter(emailManagePage.sendTo, emailManagePage.subject, emailManagePage.emailText);
+            CustomMethods.WaitForElement(emailManagePage.NoticeLetterWasCreated);
+            Assert.AreEqual(emailManagePage.emailWasCreated, emailManagePage.NoticeLetterWasCreated.Text.Trim());
             loginPage.LogOut();
         }
 
@@ -45,6 +47,8 @@ namespace SeleniumCSharp.Tests
             LoginPage loginPage = new LoginPage();
             EmailManagePage emailManagePage = loginPage.Login(ConfigurationManager.AppSettings["login"], ConfigurationManager.AppSettings["password"]);
             emailManagePage.EditDraftdEmail(emailManagePage.editText);
+            CustomMethods.WaitForElement(emailManagePage.NoticeLetterWasCreated);
+            Assert.AreEqual(emailManagePage.emailWasCreated, emailManagePage.NoticeLetterWasCreated.Text.Trim());
             loginPage.LogOut();
         }
        
@@ -55,6 +59,7 @@ namespace SeleniumCSharp.Tests
             LoginPage loginPage = new LoginPage();
             EmailManagePage emailManagePage = loginPage.Login(ConfigurationManager.AppSettings["login"], ConfigurationManager.AppSettings["password"]);
             emailManagePage.VerifySendToFieldAfterEdit();
+            Assert.AreEqual(emailManagePage.sendTo + emailManagePage.editText, emailManagePage.SendEmailTo.Text.Trim());
             loginPage.LogOut();
         }
 
@@ -64,6 +69,7 @@ namespace SeleniumCSharp.Tests
             LoginPage loginPage = new LoginPage();
             EmailManagePage emailManagePage = loginPage.Login(ConfigurationManager.AppSettings["login"], ConfigurationManager.AppSettings["password"]);
             emailManagePage.VerifySubjectFieldAfterEdit();
+            Assert.AreEqual(emailManagePage.subject + emailManagePage.editText, emailManagePage.SendEmailSubject.GetAttribute("value"));
             loginPage.LogOut();
         }
 
@@ -73,7 +79,16 @@ namespace SeleniumCSharp.Tests
             LoginPage loginPage = new LoginPage();
             EmailManagePage emailManagePage = loginPage.Login(ConfigurationManager.AppSettings["login"], ConfigurationManager.AppSettings["password"]);
             emailManagePage.VerifyBodyFieldAfterEdit();
+            Assert.AreEqual(emailManagePage.emailText + "\r\n" + emailManagePage.editText, emailManagePage.SendEmailBody.Text.Trim());
             loginPage.LogOut();
+        }
+
+        [Test]
+        public void VerifyFileUploading()
+        {
+            LoginPage loginPage = new LoginPage();
+            EmailManagePage emailManagePage = loginPage.Login(ConfigurationManager.AppSettings["login"], ConfigurationManager.AppSettings["password"]);
+            emailManagePage.VerifyFileUploading();
         }
 
         [Test]
@@ -82,7 +97,7 @@ namespace SeleniumCSharp.Tests
             LoginPage loginPage = new LoginPage();            
             EmailManagePage emailManagePage = loginPage.Login(ConfigurationManager.AppSettings["login"], ConfigurationManager.AppSettings["password"]);
             emailManagePage.VerifyFileDownloading();
-        }
+        }      
 
         [TearDown]
         public void AfterTest()
